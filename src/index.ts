@@ -17,17 +17,18 @@ import {
 } from "kolorist";
 
 /**
- * 解析命令行参数，_ 数组中包含的是所有没有被解析的参数，_ 参数的类型指定为字符串
- * pnpm create doll my-project -t react-ts
- * process.argv 表示整个命令行参数的数组，而 .slice(2) 表示从数组的第三个元素（下标为2）开始截取，
- * 因为前两个元素是 node 和执行的脚本文件路径[  '/usr/local/bin/node',  '/Users/yourname/path/to/your/app.js']。
- * 所以 process.argv.slice(2) 的结果就是 ["create", "doll", "my-project", "-t", "react-ts"]，其中包括了我们输入的参数和选项。
  * @example
  * {
- *   _: ['create', 'doll', 'my-project'],
+ *   _: ['create', 'vite', 'my-project'],
  *   t: 'react-ts',
  *   template: 'react-ts'
  * }
+ *
+ * minimist 解析命令行参数，_ 数组中包含的是所有没有被解析的参数，_ 参数的类型指定为字符串
+ * 例如：pnpm create vite my-project -t react-ts
+ * process.argv 表示整个命令行参数的数组，而 .slice(2) 表示从数组的第三个元素（下标为2）开始截取，
+ * 因为前两个元素是 node 和执行的脚本文件路径[  '/usr/local/bin/node',  '/Users/yourname/path/to/your/app.js']。
+ * 所以 process.argv.slice(2) 的结果就是 ["create", "vite", "my-project", "-t", "react-ts"]，其中包括了我们输入的参数和选项。
  */
 const argv = minimist<{
   t?: string;
@@ -55,6 +56,7 @@ type FrameworkVariant = {
   name: string;
   display: string;
   color: ColorFunc;
+  /** 自定义命令行 */
   customCommand?: string;
 };
 
@@ -240,15 +242,7 @@ async function init() {
   >;
 
   try {
-    /**
-     * 这一段代码是用来添加用户交互的，根据不同的情况来返回不同类型的交互方式，例如：
-     * 对于项目名称（projectName），如果有指定参数，则默认为文本类型，否则为文本类型
-     * 对于覆盖已有文件（overwrite），如果目标目录存在且不为空，则返回一个确认类型，否则为 null
-     * 对于包名称（packageName），如果项目名称为有效的包名称，则返回 null，否则为文本类型
-     * 对于选择框架（framework），如果指定了有效的模板（template）且存在对应的框架，则返回 null，否则为选择类型
-     * 对于选择变种（variant），如果选中的框架有变种，则返回选择类型，否则为 null
-     * 这样通过 prompts 库的不同交互类型和各个选项之间的互动就可以构建一个完整的命令行交互过程。
-     */
+    /** 这一段代码是用来添加用户交互的，根据不同的情况来返回不同类型的交互方式 */
     result = await prompts(
       [
         /**
@@ -423,7 +417,7 @@ async function init() {
   const { customCommand } =
     FRAMEWORKS.flatMap((f) => f.variants).find((v) => v.name === template) ??
     {};
-
+  /** 如果变体存在自定义指令 customCommand，则首先将指令执行语句中 npm 替换为用户自己的包管理器并执行命令 */
   if (customCommand) {
     const fullCustomCommand = customCommand
       .replace(/^npm create/, `${pkgManager} create`)

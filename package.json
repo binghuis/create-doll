@@ -1,12 +1,12 @@
 {
-  "name": "create-doll",
-  "version": "0.0.1",
+  "name": "create-vite",
+  "version": "4.1.0",
   "type": "module",
   "license": "MIT",
-  "author": "binghuis",
+  "author": "Evan You",
   "bin": {
-    "create-doll": "index.js",
-    "doll": "index.js"
+    "create-vite": "index.js",
+    "cva": "index.js"
   },
   "files": [
     "index.js",
@@ -24,17 +24,25 @@
   "engines": {
     "node": "^14.18.0 || >=16.0.0"
   },
-  "bugs": {
-    "url": "https://github.com/binghuis/create-doll/issues"
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vitejs/vite.git",
+    "directory": "packages/create-vite"
   },
-  "homepage": "https://github.com/binghuis/create-doll/blob/main/README.md",
+  "bugs": {
+    "url": "https://github.com/vitejs/vite/issues"
+  },
+  "homepage": "https://github.com/vitejs/vite/tree/main/packages/create-vite#readme",
   "devDependencies": {
     "@types/cross-spawn": "^6.0.2",
+    "@types/fs-extra": "^11.0.1",
     "@types/minimist": "^1.2.2",
     "@types/prompts": "^2.4.2",
     "@types/resolve": "^1.20.2",
     "cross-spawn": "^7.0.3",
+    "execa": "^7.0.0",
     "fast-glob": "^3.2.12",
+    "fs-extra": "^11.1.0",
     "kolorist": "^1.6.0",
     "minimist": "^1.2.7",
     "only-allow": "^1.1.1",
@@ -43,6 +51,7 @@
     "resolve": "^1.22.1",
     "rollup": "^3.17.2",
     "rollup-plugin-license": "^3.0.1",
-    "unbuild": "^1.1.2"
+    "unbuild": "^1.1.2",
+    "vitest": "^0.28.5"
   }
 }
